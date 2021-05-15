@@ -18,6 +18,7 @@ const main = async () => {
 
         await page.goto('https://nextstrain.org/groups/niph')
 
+        await page.waitForSelector('div:text("groups/niph/ncov/norway-all")')
         const links = await page.$$('div:text("groups/niph/ncov/norway-all")')
         const datasets = []
 
