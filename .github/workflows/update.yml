@@ -1,0 +1,34 @@
+on:
+  schedule:
+    - cron:  '40 10,15,21 * * *'
+  push:
+    branches: [master]
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15
+
+      - name: Update data
+        run: npm install && npm run fetch
+
+      - name: Check state
+        run: "[[ -n $(git status --porcelain --untracked-files=no) ]] && touch .is-dirty"
+
+      - name: Commit files
+        if: hashFiles('.is-dirty') != ''
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update data" -a
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
