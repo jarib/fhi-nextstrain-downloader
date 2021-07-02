@@ -18,8 +18,8 @@ const main = async () => {
 
         await page.goto('https://nextstrain.org/groups/niph')
 
-        await page.waitForSelector('div:text("groups/niph/ncov/norway-all")')
-        const links = await page.$$('div:text("groups/niph/ncov/norway-all")')
+        await page.waitForSelector('a:text("ncov/norway-all")')
+        const links = await page.$$('a:text("ncov/norway-all")')
         const datasets = []
 
         for (const link of links) {
@@ -33,7 +33,7 @@ const main = async () => {
         }
 
         const latest = last(orderBy(datasets, 'date', 'asc'))
-        await page.click(`div:text("${latest.name}")`)
+        await page.click(`a:text("${latest.name}")`)
         await page.click('text="Download data"')
 
         const [download] = await Promise.all([
