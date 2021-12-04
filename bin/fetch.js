@@ -33,6 +33,8 @@ const main = async () => {
         }
 
         const latest = last(orderBy(datasets, 'date', 'asc'))
+        console.log('fetching dataset', latest)
+
         await page.click(`a:text("${latest.name}")`)
         await page.click('text="Download data"')
 
